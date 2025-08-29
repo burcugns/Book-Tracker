@@ -46,7 +46,7 @@ function ReadingCreate() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           type="text"
-          placeholder="Book title..."
+          placeholder="Book or article title..."
           className="flex-1 min-w-[200px] px-4 py-3 border border-neutral-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-300/50 focus:border-emerald-400 transition-all duration-200 placeholder-neutral-400"
         />
         <input
