@@ -1,0 +1,70 @@
+import { useFormik } from "formik";
+import { loginFormSchema } from "../schemas/LoginFormSchema";
+import { Link, useNavigate } from "react-router-dom";
+
+function LoginForm() {
+    const navigate=useNavigate();
+  const { values, errors, touched, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginFormSchema,
+    onSubmit: (values) => {
+      console.log("Login values:", values);
+      // API call will be added
+       navigate("/readings");
+    },
+  });
+
+  return (
+    <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg ring-1 ring-neutral-200">
+      <h2 className="text-2xl font-bold text-emerald-900 mb-6 text-center">
+        Login
+      </h2>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email address"
+            onChange={handleChange}
+            value={values.email}
+            className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-4 focus:ring-emerald-300/50"
+          />
+          {touched.email && errors.email && (
+            <div className="text-red-500 text-sm mt-1">{errors.email}</div>
+          )}
+        </div>
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            value={values.password}
+            className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-4 focus:ring-emerald-300/50"
+          />
+          {touched.password && errors.password && (
+            <div className="text-red-500 text-sm mt-1">{errors.password}</div>
+          )}
+        </div>
+        <button
+          type="submit"
+          className="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-medium rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all"
+        >
+          Log In
+        </button>
+      </form>
+      <p className="text-sm text-center text-neutral-600 mt-6">
+        Don’t have an account?{" "}
+        <Link to="/signup" className="text-emerald-700 font-medium hover:underline">
+          Sign Up
+        </Link>
+      </p>
+    </div>
+  );
+}
+
+export default LoginForm;
