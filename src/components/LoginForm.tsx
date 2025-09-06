@@ -1,9 +1,23 @@
 import { useFormik } from "formik";
 import { loginFormSchema } from "../schemas/LoginFormSchema";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function LoginForm() {
-    const navigate=useNavigate();
+  async function login(email: string, pass: string): Promise<string> {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/login?email=${email}&password=${pass}`
+      );
+      return String(response.data);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Login failed");
+    }
+  }
+
+  const navigate = useNavigate();
+
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: {
       email: "",
@@ -12,8 +26,19 @@ function LoginForm() {
     validationSchema: loginFormSchema,
     onSubmit: (values) => {
       console.log("Login values:", values);
-      // API call will be added
-       navigate("/readings");
+      login(values.email, values.password)
+        .then((result) => {
+          if (result == "correct password") {
+            navigate("/readings");
+          } else if (result == "wrong password") {
+            console.log("login failed");
+          } else if (result == "user not found") {
+            navigate("/signup");
+          }
+        })
+        .catch((err) => {
+          console.error("Error:", err.message);
+        });
     },
   });
 
@@ -37,6 +62,7 @@ function LoginForm() {
             <div className="text-red-500 text-sm mt-1">{errors.email}</div>
           )}
         </div>
+
         <div>
           <input
             type="password"
@@ -50,6 +76,7 @@ function LoginForm() {
             <div className="text-red-500 text-sm mt-1">{errors.password}</div>
           )}
         </div>
+
         <button
           type="submit"
           className="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-medium rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all"
@@ -57,9 +84,13 @@ function LoginForm() {
           Log In
         </button>
       </form>
+
       <p className="text-sm text-center text-neutral-600 mt-6">
         Don’t have an account?{" "}
-        <Link to="/signup" className="text-emerald-700 font-medium hover:underline">
+        <Link
+          to="/signup"
+          className="text-emerald-700 font-medium hover:underline"
+        >
           Sign Up
         </Link>
       </p>

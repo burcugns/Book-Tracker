@@ -1,9 +1,23 @@
 import { useFormik } from "formik";
 import { registerFormSchema } from "../schemas/RegisterFormSchema";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function RegisterForm() {
-    const navigate=useNavigate();
+  async function signup(email: string, pass: string): Promise<string> {
+    try {
+      const response = await axios.post(`http://127.0.0.1:8000/signup`, {
+        email: email,
+        password: pass,
+      });
+      return String(response.data);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Login failed");
+    }
+  }
+
+  const navigate = useNavigate();
 
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: {
@@ -14,10 +28,9 @@ function RegisterForm() {
     validationSchema: registerFormSchema,
     onSubmit: (values) => {
       console.log("Form values:", values);
-      // API call will be added...
+      signup(values.email, values.password);
       navigate("/readings");
     },
-    
   });
 
   return (
@@ -63,7 +76,9 @@ function RegisterForm() {
             className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-4 focus:ring-emerald-300/50"
           />
           {touched.confirmPassword && errors.confirmPassword && (
-            <div className="text-red-500 text-sm mt-1">{errors.confirmPassword}</div>
+            <div className="text-red-500 text-sm mt-1">
+              {errors.confirmPassword}
+            </div>
           )}
         </div>
         <button
@@ -73,7 +88,7 @@ function RegisterForm() {
           Sign Up
         </button>
       </form>
-       <p className="text-sm text-center text-neutral-600 mt-6">
+      <p className="text-sm text-center text-neutral-600 mt-6">
         Already have an account?{" "}
         <Link to="/" className="text-emerald-700 font-medium hover:underline">
           Log In
