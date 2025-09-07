@@ -2,8 +2,10 @@ import { useFormik } from "formik";
 import { loginFormSchema } from "../schemas/LoginFormSchema";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useState } from "react";
 
 function LoginForm() {
+  const [errorpass, setErrorPass] = useState("");
   async function login(email: string, pass: string): Promise<string> {
     try {
       const response = await axios.get(
@@ -26,19 +28,15 @@ function LoginForm() {
     validationSchema: loginFormSchema,
     onSubmit: (values) => {
       console.log("Login values:", values);
-      login(values.email, values.password)
-        .then((result) => {
-          if (result == "correct password") {
-            navigate("/readings");
-          } else if (result == "wrong password") {
-            console.log("login failed");
-          } else if (result == "user not found") {
-            navigate("/signup");
-          }
-        })
-        .catch((err) => {
-          console.error("Error:", err.message);
-        });
+      login(values.email, values.password).then((result) => {
+        if (result == "correct password") {
+          navigate("/readings");
+        } else if (result == "wrong password") {
+          setErrorPass("Password is wrong");
+        } else if (result == "user not found") {
+          navigate("/signup");
+        }
+      });
     },
   });
 
@@ -54,7 +52,10 @@ function LoginForm() {
             type="email"
             name="email"
             placeholder="Email address"
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              setErrorPass("");
+            }}
             value={values.email}
             className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-4 focus:ring-emerald-300/50"
           />
@@ -68,7 +69,10 @@ function LoginForm() {
             type="password"
             name="password"
             placeholder="Password"
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              setErrorPass("");
+            }}
             value={values.password}
             className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-4 focus:ring-emerald-300/50"
           />
@@ -76,6 +80,11 @@ function LoginForm() {
             <div className="text-red-500 text-sm mt-1">{errors.password}</div>
           )}
         </div>
+        {errorpass && (
+          <div className="text-red-500 text-sm mb-2 text-center">
+            {errorpass}
+          </div>
+        )}
 
         <button
           type="submit"

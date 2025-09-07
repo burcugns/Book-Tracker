@@ -2,8 +2,11 @@ import { useFormik } from "formik";
 import { registerFormSchema } from "../schemas/RegisterFormSchema";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useState } from "react";
 
 function RegisterForm() {
+  const [errorm, setErrorm] = useState("");
+
   async function signup(email: string, pass: string): Promise<string> {
     try {
       const response = await axios.post(`http://127.0.0.1:8000/signup`, {
@@ -28,8 +31,14 @@ function RegisterForm() {
     validationSchema: registerFormSchema,
     onSubmit: (values) => {
       console.log("Form values:", values);
-      signup(values.email, values.password);
-      navigate("/readings");
+      signup(values.email, values.password).then((result) => {
+        if (result === "user already exist") {
+          setErrorm("User already exist. Go to the login page");
+        } else {
+          setErrorm("");
+          navigate("/readings");
+        }
+      });
     },
   });
 
@@ -81,6 +90,9 @@ function RegisterForm() {
             </div>
           )}
         </div>
+        {errorm && (
+          <div className="text-red-500 text-sm mb-2 text-center">{errorm}</div>
+        )}
         <button
           type="submit"
           className="w-full px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-medium rounded-xl hover:scale-[1.02] hover:shadow-lg transition-all"
