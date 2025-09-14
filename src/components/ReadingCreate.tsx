@@ -2,41 +2,66 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addReading } from "../redux/ReadingSlice";
 import type { ReadingType } from "../types/Types";
+import axios from "axios";
 
-function ReadingCreate() {
+type Props = {
+  user_email: string;
+};
+
+function ReadingCreate({ user_email }: Props) {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
 
-  const handleAdd = () => {
+  async function add_books_to_backend(
+    title: string,
+    author: string,
+    category: string,
+    user_email: string,
+    date: string
+  ): Promise<ReadingType> {
+    await axios.post("http://127.0.0.1:8000/user_books", {
+      title,
+      author,
+      category,
+      user_email,
+      date: date,
+    });
+
+    return {
+      id: Math.floor(Math.random() * 9999999),
+      title,
+      author,
+      category,
+      date: date,
+    };
+  }
+
+  const handleAdd = async () => {
     if (title.trim().length === 0) {
       alert("Please enter a book title");
       return;
     }
 
     const now = new Date();
-    const date = now.toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    }).replace(",", "");
+    const date = now.toISOString();
+    try {
+      const payload = await add_books_to_backend(
+        title,
+        author,
+        category,
+        user_email,
+        date
+      );
 
-    const content = [title, author, category, date].filter(Boolean).join(" • ");
-
-    const payload: ReadingType = {
-      id: Math.floor(Math.random() * 9999999),
-      content,
-    };
-
-    dispatch(addReading(payload));
-    setTitle("");
-    setAuthor("");
-    setCategory("");
+      dispatch(addReading(payload));
+      setTitle("");
+      setAuthor("");
+      setCategory("");
+    } catch (e) {
+      console.log("error", e);
+    }
   };
 
   return (
