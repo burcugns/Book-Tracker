@@ -6,6 +6,7 @@ import { useState } from "react";
 
 function LoginForm() {
   const [errorpass, setErrorPass] = useState("");
+  const [errorm, setErrorm] = useState("");
   async function login(email: string, pass: string): Promise<string> {
     try {
       const response = await axios.get(
@@ -13,7 +14,6 @@ function LoginForm() {
       );
       return String(response.data);
     } catch (error) {
-      console.error(error);
       throw new Error("Login failed");
     }
   }
@@ -27,14 +27,17 @@ function LoginForm() {
     },
     validationSchema: loginFormSchema,
     onSubmit: (values) => {
-      console.log("Login values:", values);
       login(values.email, values.password).then((result) => {
         if (result == "correct password") {
-          navigate("/readings");
+          navigate("/readings", {
+            state: {
+              data: { email: values.email },
+            },
+          });
         } else if (result == "wrong password") {
-          setErrorPass("Password is wrong");
+          setErrorPass("Incorrect password.");
         } else if (result == "user not found") {
-          navigate("/signup");
+          setErrorm("No account found with this email. Please sign up first");
         }
       });
     },
@@ -54,13 +57,19 @@ function LoginForm() {
             placeholder="Email address"
             onChange={(e) => {
               handleChange(e);
-              setErrorPass("");
+              setErrorm("");
             }}
             value={values.email}
             className="w-full px-4 py-3 border border-neutral-300 rounded-xl focus:ring-4 focus:ring-emerald-300/50"
           />
+
           {touched.email && errors.email && (
             <div className="text-red-500 text-sm mt-1">{errors.email}</div>
+          )}
+          {errorm && (
+            <div className="text-red-500 text-sm mb-2 text-center">
+              {errorm}
+            </div>
           )}
         </div>
 
