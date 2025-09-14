@@ -16,9 +16,12 @@ function ReadingList() {
 
       <div className="space-y-4 divide-y divide-neutral-200/60">
         {readings && readings.length > 0 ? (
-          readings.slice().reverse().map((reading: ReadingType) => (
-            <ReadingItem key={reading.id} reading={reading} />
-          ))
+          readings
+            .slice()
+            .reverse()
+            .map((reading: ReadingType) => (
+              <ReadingItem key={reading.id} reading={reading} />
+            ))
         ) : (
           <p className="text-neutral-500">No readings added yet.</p>
         )}
