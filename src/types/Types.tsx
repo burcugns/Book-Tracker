@@ -4,7 +4,8 @@ export interface ReadingInitialState {
 export interface ReadingType {
   id: string;
   title: string;
-  author?: string;
-  category?: string;
+  author: string;
+  category: string;
+  isRead: boolean;
   date: string;
 }
