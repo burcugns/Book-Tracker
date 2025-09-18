@@ -1,22 +1,13 @@
 import { useFormik } from "formik";
 import { loginFormSchema } from "../schemas/LoginFormSchema";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { login } from "./ApiCalls";
+
 import { useState } from "react";
 
 function LoginForm() {
   const [errorpass, setErrorPass] = useState("");
   const [errorm, setErrorm] = useState("");
-  async function login(email: string, pass: string): Promise<string> {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/login?email=${email}&password=${pass}`
-      );
-      return String(response.data);
-    } catch (error) {
-      throw new Error("Login failed");
-    }
-  }
 
   const navigate = useNavigate();
 
