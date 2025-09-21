@@ -1,24 +1,11 @@
 import { useFormik } from "formik";
 import { registerFormSchema } from "../schemas/RegisterFormSchema";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useState } from "react";
+import { signup } from "./ApiCalls";
 
 function RegisterForm() {
   const [errorm, setErrorm] = useState("");
-
-  async function signup(email: string, pass: string): Promise<string> {
-    try {
-      const response = await axios.post(`http://127.0.0.1:8000/signup`, {
-        email: email,
-        password: pass,
-      });
-      return String(response.data);
-    } catch (error) {
-      console.error(error);
-      throw new Error("Login failed");
-    }
-  }
 
   const navigate = useNavigate();
 

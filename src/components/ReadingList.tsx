@@ -19,9 +19,7 @@ function ReadingList() {
           readings
             .slice()
             .reverse()
-            .map((reading: ReadingType) => (
-              <ReadingItem key={reading.id} reading={reading} />
-            ))
+            .map((reading: ReadingType) => <ReadingItem reading={reading} />)
         ) : (
           <p className="text-neutral-500">No readings added yet.</p>
         )}

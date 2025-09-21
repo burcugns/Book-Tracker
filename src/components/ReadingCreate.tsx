@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addReading } from "../redux/ReadingSlice";
-import type { ReadingType } from "../types/Types";
-import axios from "axios";
+import { add_books_to_backend } from "./ApiCalls";
 
 type Props = {
   user_email: string;
@@ -13,30 +12,6 @@ function ReadingCreate({ user_email }: Props) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [category, setCategory] = useState("");
-
-  async function add_books_to_backend(
-    title: string,
-    author: string,
-    category: string,
-    user_email: string,
-    date: string
-  ): Promise<ReadingType> {
-    await axios.post("http://127.0.0.1:8000/user_books", {
-      title,
-      author,
-      category,
-      user_email,
-      date: date,
-    });
-
-    return {
-      id: Math.floor(Math.random() * 9999999),
-      title,
-      author,
-      category,
-      date: date,
-    };
-  }
 
   const handleAdd = async () => {
     if (title.trim().length === 0) {
