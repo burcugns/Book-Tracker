@@ -1,6 +1,10 @@
 # Book Tracker
 
-A React-based book tracking application built with TypeScript, Redux Toolkit, and Tailwind CSS.
+A React-based Book Tracking Application built with TypeScript, Redux Toolkit, and Tailwind CSS.
+
+User authentication (login & signup) and data management are handled by the backend.
+
+The backend is located in the Book-Tracker-Backend repository.
 
 ## Features
 
@@ -8,9 +12,9 @@ A React-based book tracking application built with TypeScript, Redux Toolkit, an
 - Mark books as read/unread
 - Edit book information
 - Delete books
+- Login and Signup pages for authentication
 
-
-<img src="img/screenshot.png" alt="Book Tracker Picture" width="400" />
+<img src="img/booktracker.png" alt="Book Tracker Picture" width="400" />
 
 ## Technologies Used
 
@@ -22,6 +26,40 @@ A React-based book tracking application built with TypeScript, Redux Toolkit, an
 
 ## Project Structure
 
-- `src/components/` - React components
-- `src/redux/` - Redux store and slices
-- `src/types/` - TypeScript type definitions
+```
+Book-Tracker/
+
+├─ README.md
+├─ img/
+│  └─ booktracker.png
+├─ src/
+│  ├─ App.tsx
+│  ├─ App.css
+│  ├─ index.css
+│  ├─ main.tsx
+│  ├─ vite-env.d.ts
+│  ├─ Router/
+│  │  └─ Routers.tsx
+│  ├─ components/
+│  │  ├─ ApiCalls.tsx
+│  │  ├─ LoginForm.tsx
+│  │  ├─ Navbar.tsx
+│  │  ├─ ReadingCreate.tsx
+│  │  ├─ ReadingItem.tsx
+│  │  └─ ReadingList.tsx
+│  ├─ pages/
+│  │  ├─ LoginPage.tsx
+│  │  ├─ Profile.tsx
+│  │  ├─ ReadingPage.tsx
+│  │  ├─ RegisterFormPage.tsx
+│  │  └─ Settings.tsx
+│  ├─ redux/
+│  │  ├─ ReadingSlice.tsx
+│  │  └─ Store.tsx
+│  ├─ schemas/
+│  │  ├─ LoginFormSchema.tsx
+│  │  └─ RegisterFormSchema.tsx
+│  └─ types/
+│     └─ Types.tsx
+
+```
