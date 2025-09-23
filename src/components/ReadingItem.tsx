@@ -23,7 +23,7 @@ function ReadingItem({ reading }: ReadingItemProps) {
 
   let updatedIsRead = isRead;
 
-  const toggleRead = () => {
+  const update_is_read = () => {
     updatedIsRead = !isRead;
 
     //backend update
@@ -139,7 +139,7 @@ function ReadingItem({ reading }: ReadingItemProps) {
 
       <div className="flex space-x-4 text-neutral-400 mt-1">
         <span
-          onClick={toggleRead}
+          onClick={update_is_read}
           className={`cursor-pointer transition-transform duration-300 text-xl hover:scale-125 ${
             isRead
               ? "text-emerald-600 hover:text-emerald-700"

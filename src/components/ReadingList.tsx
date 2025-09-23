@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
 import ReadingItem from "./ReadingItem";
 import type { RootState } from "../redux/Store";
-import type { ReadingType } from "../types/Types";
 
 function ReadingList() {
   const { readings } = useSelector((state: RootState) => state.reading);
 
+  console.log(readings);
   return (
     <div className="bg-gradient-to-br from-white to-neutral-50 rounded-2xl shadow-md ring-1 ring-neutral-200 p-6">
       <div className="flex items-center justify-between mb-6">
@@ -19,7 +19,9 @@ function ReadingList() {
           readings
             .slice()
             .reverse()
-            .map((reading: ReadingType) => <ReadingItem reading={reading} />)
+            .map((reading) => (
+              <ReadingItem key={reading.id} reading={reading} />
+            ))
         ) : (
           <p className="text-neutral-500">No readings added yet.</p>
         )}
